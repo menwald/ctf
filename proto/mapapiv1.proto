@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package ctf.mapapi.v1;
+
+import "google/protobuf/timestamp.proto";
+//import "google/protobuf/wrappers.proto";
+
+service MapAPI {
+  rpc GetEntireMap(GetEntireMapRequest) returns (GetEntireMapResponse) {}
+}
+
+message GetEntireMapRequest {
+    google.protobuf.Timestamp timestamp = 1;
+    
+}
