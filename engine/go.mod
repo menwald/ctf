@@ -1,3 +1,3 @@
-module githubcom/menwald/ctf/engine
+module github.com/menwald/ctf/engine
 
-go 1.19
+go 1.21
