@@ -1,9 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"github.com/menwald/ctf/common"
+	"github.com/rs/zerolog"
+)
 
 func main() {
-	// read configs
-	// set up logging
-	fmt.Printf("hello world\n")
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	common.LoadConfig()
 }

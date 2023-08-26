@@ -43,3 +43,14 @@ playback
 AI
 
 Score / Game stats / records
+
+August 25th ideas 
+* Captains - td6 style stats.
+    * panic, extra stats on flag return
+    * drones.  Can see open areas, not tress.  Can't move wnhile operating drone
+    * swim stats.  Some can swim, some can't
+    * sc2 coop style upgrade of heros
+* Cliffs
+    * some can climb, some can't
+    * leap.  Can clear cliffs
+* 
