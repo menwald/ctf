@@ -1,33 +1,51 @@
 package config
 
 import (
+	"bytes"
 	"flag"
-	"fmt"
+	"path/filepath"
+	"strings"
 
 	"github.com/a8m/envsubst"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
 
-func LoadConfig() {
+type Config struct {
+	filename string
+	viper    *viper.Viper
+}
+
+func (c Config) Filename() string {
+	return c.filename
+}
+
+func (c Config) GetString(key string) string {
+	return c.viper.GetString(key)
+}
+
+func (c Config) GetInt(key string) int {
+	return c.viper.GetInt(key)
+}
+
+func Load() (Config, error) {
 	configFile := flag.String("config-file", "./configs/config.yaml", "Config file location.")
 	flag.Parse()
-	v := viper.New()
-	b, err := envsubst.ReadFileRestricted(configFile, true, false)
+	ret := Config{filename: *configFile, viper: viper.New()}
+	ret.viper.SetConfigType("yaml")
+	b, err := envsubst.ReadFileRestricted(*configFile, true, false)
 	if err != nil {
-
+		log.Err(err).Msg("unable to read config file")
+		return ret, err
 	}
 
-	configVals, err := config.NewConfig(configFile)
-	if err != nil {
-		panic(fmt.Sprintf("failed to load config.  Error: %s", err.Error()))
-	}
-	if err := viper.ReadInConfig(); err != nil {
+	ret.viper.SetConfigType(strings.TrimPrefix(filepath.Ext(*configFile), "."))
+	if err := ret.viper.ReadConfig(bytes.NewBuffer(b)); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			log.Info().Msg("no configuration file found")
-		} else {
-			log.Err(err).Msg("unable to load configuration file")
+			log.Err(err).Msg(("unable to load config file"))
+			return ret, err
 		}
 	}
-	log.Debug().Str("config-file", viper.ConfigFileUsed()).Msg("loaded configuration file")
+
+	return ret, nil
 }

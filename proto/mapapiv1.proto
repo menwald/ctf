@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package ctf.mapapi.v1;
+option go_package = "github.com/menwald/ctf/proto";
 
 import "google/protobuf/timestamp.proto";
 //import "google/protobuf/wrappers.proto";
@@ -11,5 +12,8 @@ service MapAPI {
 
 message GetEntireMapRequest {
     google.protobuf.Timestamp timestamp = 1;
-    
+}
+
+message GetEntireMapResponse {
+    google.protobuf.Timestamp timestamp = 1;
 }
