@@ -54,3 +54,19 @@ August 25th ideas
     * some can climb, some can't
     * leap.  Can clear cliffs
 * 
+
+settings.json for the vscode-proto3 extension that compiles the protos into generated go code
+```
+{
+    "explorer.confirmDelete": false,
+    "protoc": {
+        "path": "/Users/matte/protobuf/bin/protoc",
+        "compile_on_save": false,
+        "options": [
+            "--proto_path=${workspaceRoot}/proto",
+            "--go_out=proto",
+            "--go-grpc_out=proto",
+        ]
+    }
+}
+```
