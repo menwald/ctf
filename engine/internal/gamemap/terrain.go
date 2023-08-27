@@ -9,6 +9,9 @@ type Obstacle struct {
 }
 
 type Terrain struct {
-	Type      terraintype.TerrainType
-	Obstacles []Obstacle
+	Type            terraintype.TerrainType
+	Obstacles       []Obstacle
+	RunResistance   int
+	ClimbResistance int
+	SwimResistance  int
 }

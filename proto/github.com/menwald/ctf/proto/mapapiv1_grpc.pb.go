@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	MapAPI_GetEntireMap_FullMethodName = "/ctf.mapapi.v1.MapAPI/GetEntireMap"
+	MapAPI_CreateNewMap_FullMethodName = "/ctf.mapapi.v1.MapAPI/CreateNewMap"
 )
 
 // MapAPIClient is the client API for MapAPI service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MapAPIClient interface {
 	GetEntireMap(ctx context.Context, in *GetEntireMapRequest, opts ...grpc.CallOption) (*GetEntireMapResponse, error)
+	CreateNewMap(ctx context.Context, in *CreateNewMapRequest, opts ...grpc.CallOption) (*CreateNewMapResponse, error)
 }
 
 type mapAPIClient struct {
@@ -46,11 +48,21 @@ func (c *mapAPIClient) GetEntireMap(ctx context.Context, in *GetEntireMapRequest
 	return out, nil
 }
 
+func (c *mapAPIClient) CreateNewMap(ctx context.Context, in *CreateNewMapRequest, opts ...grpc.CallOption) (*CreateNewMapResponse, error) {
+	out := new(CreateNewMapResponse)
+	err := c.cc.Invoke(ctx, MapAPI_CreateNewMap_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MapAPIServer is the server API for MapAPI service.
 // All implementations must embed UnimplementedMapAPIServer
 // for forward compatibility
 type MapAPIServer interface {
 	GetEntireMap(context.Context, *GetEntireMapRequest) (*GetEntireMapResponse, error)
+	CreateNewMap(context.Context, *CreateNewMapRequest) (*CreateNewMapResponse, error)
 	mustEmbedUnimplementedMapAPIServer()
 }
 
@@ -60,6 +72,9 @@ type UnimplementedMapAPIServer struct {
 
 func (UnimplementedMapAPIServer) GetEntireMap(context.Context, *GetEntireMapRequest) (*GetEntireMapResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEntireMap not implemented")
+}
+func (UnimplementedMapAPIServer) CreateNewMap(context.Context, *CreateNewMapRequest) (*CreateNewMapResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateNewMap not implemented")
 }
 func (UnimplementedMapAPIServer) mustEmbedUnimplementedMapAPIServer() {}
 
@@ -92,6 +107,24 @@ func _MapAPI_GetEntireMap_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MapAPI_CreateNewMap_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateNewMapRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MapAPIServer).CreateNewMap(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MapAPI_CreateNewMap_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MapAPIServer).CreateNewMap(ctx, req.(*CreateNewMapRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MapAPI_ServiceDesc is the grpc.ServiceDesc for MapAPI service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -102,6 +135,10 @@ var MapAPI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetEntireMap",
 			Handler:    _MapAPI_GetEntireMap_Handler,
+		},
+		{
+			MethodName: "CreateNewMap",
+			Handler:    _MapAPI_CreateNewMap_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

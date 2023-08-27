@@ -20,3 +20,9 @@ func (g *GameMap) GetEntireMap(ctx context.Context, req *pb.GetEntireMapRequest)
 	log.Debug().Str("response", protojson.Format(&resp)).Msg("handled GetEntireMap request")
 	return &resp, nil
 }
+
+func (g *GameMap) CreateNewMap(ctx context.Context, req *pb.CreateNewMapRequest) (*pb.CreateNewMapResponse, error) {
+	var resp pb.CreateNewMapResponse
+	resp.Timestamp = timestamppb.New(time.Now())
+	return &resp, nil
+}

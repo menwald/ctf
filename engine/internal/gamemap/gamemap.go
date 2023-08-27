@@ -36,3 +36,21 @@ func (g GameMap) Terrain(c Coordinates) (Terrain, error) {
 func (g GameMap) areValid(c Coordinates) bool {
 	return len(g.terrain) > c.X && len(g.terrain[c.X]) > c.Y
 }
+
+func Generate(width uint, height uint, maxTeams uint) (GameMap, error) {
+	m := GameMap{terrain: make([][]Terrain, width)}
+	for i := range m.terrain {
+		m.terrain[i] = make([]Terrain, height)
+		for j := range m.terrain[i] {
+			m.terrain[i][j] = Terrain{
+				Type:            terraintype.Forest,
+				Obstacles:       nil,
+				RunResistance:   3,
+				ClimbResistance: 0,
+				SwimResistance:  0,
+			}
+		}
+	}
+
+	return m, nil
+}

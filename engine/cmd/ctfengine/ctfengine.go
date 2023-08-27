@@ -10,14 +10,19 @@ import (
 	grpc_validator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
 	"github.com/menwald/ctf/common/config"
 	"github.com/menwald/ctf/engine/internal/apihandler"
+	"github.com/menwald/ctf/engine/internal/gamemap"
 	"github.com/menwald/ctf/proto/github.com/menwald/ctf/proto"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
-
-	//"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/grpclog"
 )
+
+// A few things to add
+// * http grpc gateway
+// * cert
+// * OpenAPI handler
+// * healthchecks
 
 func main() {
 	// Basic initialization like logging and config.yaml
@@ -33,6 +38,16 @@ func main() {
 	}
 	log.Info().Str("configFile", cfg.Filename()).Msg("starting application")
 
+	////////////////////////
+	// REMOVE HACKING
+	////////////////////////
+
+	gamemap.JustOpenIt()
+
+	////////////////////////
+	// REMOVE HACKING
+	////////////////////////
+
 	svrAddr := cfg.GetString("grpc.address")
 	lis, err := net.Listen("tcp", svrAddr)
 	if err != nil {
@@ -41,7 +56,6 @@ func main() {
 	}
 	grpclog.V(2)
 	gsvr := grpc.NewServer(
-		//grpc.Creds(credentials.NewServerTLSFromCert(&insecure.Cert)),
 		grpc.UnaryInterceptor(grpc_validator.UnaryServerInterceptor()),
 		grpc.StreamInterceptor(grpc_validator.StreamServerInterceptor()),
 		grpc.MaxRecvMsgSize(1024*1024),
@@ -60,31 +74,6 @@ func main() {
 	}()
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
-
-	/*
-		addr := cfg.GetString("grpc.address")
-		lis, err := net.Listen("tcp", addr)
-		if err != nil {
-			log.Err(err)
-			return
-		}
-		grpclog.V(2)
-		gsvr := grpc.NewServer(
-			//grpc.Creds(credentials.NewServerTLSFromCert(&insecure.Cert)),
-			grpc.UnaryInterceptor(grpc_validator.UnaryServerInterceptor()),
-			grpc.StreamInterceptor(grpc_validator.StreamServerInterceptor()),
-			grpc.MaxRecvMsgSize(1024*1024),
-			grpc.MaxSendMsgSize(1024*1024),
-		)
-		//svr := grpc.Server
-		log.Info().Str("address", addr).Msg("starting grpc server")
-		err = gsvr.Serve(lis)
-		if err != nil {
-			log.Err(err)
-			return
-		}
-	*/
-	//cancel()
 	signal.Notify(stop, os.Interrupt)
 
 	<-stop

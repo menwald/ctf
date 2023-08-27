@@ -4,16 +4,63 @@ package ctf.mapapi.v1;
 option go_package = "github.com/menwald/ctf/proto";
 
 import "google/protobuf/timestamp.proto";
-//import "google/protobuf/wrappers.proto";
+import "google/protobuf/wrappers.proto";
 
 service MapAPI {
   rpc GetEntireMap(GetEntireMapRequest) returns (GetEntireMapResponse) {}
+  rpc CreateNewMap(CreateNewMapRequest) returns (CreateNewMapResponse) {}
 }
 
 message GetEntireMapRequest {
     google.protobuf.Timestamp timestamp = 1;
+    google.protobuf.StringValue map_name = 2;
 }
 
 message GetEntireMapResponse {
     google.protobuf.Timestamp timestamp = 1;
 }
+
+message CreateNewMapRequest {
+    google.protobuf.Timestamp timestamp = 1;
+    google.protobuf.StringValue map_name = 2;
+    uint32 width = 3;
+    uint32 height = 4;
+    uint32 max_teams = 5;
+
+}
+
+message CreateNewMapResponse {
+    google.protobuf.Timestamp timestamp = 1;
+    google.protobuf.StringValue map_name = 2;
+    uint32 width = 3;
+    uint32 height = 4;
+    repeated MapRows tile_grid = 5;
+}
+
+message MapRows {
+  repeated MapTile tile = 1;
+}
+
+message Obstacle {
+    google.protobuf.StringValue type = 1;
+}
+
+message Terrain {
+    google.protobuf.StringValue type = 1;
+    repeated Obstacle obstacles = 2;
+    int32 run_resistance = 3;
+    int32 climb_resistance = 4;
+    int32 swim_resistance = 5;
+}
+
+message MapTile {
+  uint32 x = 1;
+  uint32 y = 2;
+  Terrain terrain = 3;
+}
+
+// Some thoughts
+// Save the map to a backend/database.  Keep the engine as stateless as possible, or at least able to restart easily
+// Save/Request maps by name.  Maybe category or tree.  The full response sends back terrain json
+// Each map has a slot for a team.  Teams join that slot (starcraft style)
+// 

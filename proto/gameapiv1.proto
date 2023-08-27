@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package ctf.gameapi.v1;
+option go_package = "github.com/menwald/ctf/proto";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+service GameAPI {
+  rpc StartNewGame(StartNewGameRequest) returns (StartNewGameResponse) {}
+}
+
+message StartNewGameRequest {
+    google.protobuf.Timestamp timestamp = 1;
+    google.protobuf.StringValue map_name = 2;
+}
+
+message StartNewGameResponse {
+    google.protobuf.Timestamp timestamp = 1;
+    google.protobuf.StringValue game_session_id = 2;
+}
+

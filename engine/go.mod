@@ -8,6 +8,7 @@ require (
 	github.com/menwald/ctf/proto v0.0.0-20230826211658-a60a0e5b2da9
 	github.com/rs/zerolog v1.30.0
 	github.com/stretchr/testify v1.8.4
+	github.com/yanndr/tmx v0.2.1
 	google.golang.org/grpc v1.55.0
 	google.golang.org/protobuf v1.31.0
 )
